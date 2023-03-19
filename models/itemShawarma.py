@@ -1,29 +1,37 @@
-from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, ForeignKey, Boolean
+from datetime import datetime
 
-from src.database import metadata
+from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, ForeignKey
+
+from .models import METADATA
+
+metadata = METADATA
 
 item = Table(
     "item",
     metadata,
-    Column("shawarma_id", Integer, primary_key=True),
+    Column("id", Integer, primary_key=True),
     Column("name", String),
     Column("cost", String),
     Column("photo_path", String),
-    Column("created_at", TIMESTAMP),
-    Column("updated_at", TIMESTAMP)
+    Column("created_at", TIMESTAMP, default=datetime.utcnow),
+    Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 )
 
 ingredients = Table(
-    "ingredients",
+    "ingredient",
     metadata,
-    Column("ingredients_id", Integer, primary_key=True),
-    Column("name", String)
+    Column("id", Integer, primary_key=True),
+    Column("name", String),
+    Column("created_at", TIMESTAMP, default=datetime.utcnow),
+    Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 )
 
 ingredients_shawarma = Table(
     "ingredients_shawarma",
     metadata,
-    Column("ingredients_id", Integer, ForeignKey(ingredients.c.ingredients_id)),
-    Column("shawarma_id", Integer, ForeignKey(item.c.shawarma_id)),
-    Column("shaw_ingr_pkey", Integer, primary_key = True)
+    Column("id", Integer, primary_key=True),
+    Column("ingredient_id", Integer, ForeignKey(ingredients.c.id)),
+    Column("item_id", Integer, ForeignKey(item.c.id)),
+    Column("created_at", TIMESTAMP, default=datetime.utcnow),
+    Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 )
