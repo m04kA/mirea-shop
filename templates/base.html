@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,18 +11,22 @@
     <title>Шаурма</title>
 </head>
 <body>
-    <nav class="flex justify-between text-3xl my-3">
+    <nav class="flex justify-between text-3xl my-5">
         <ul class="flex ml-10">
             <li>Шаурма на углях</li>
         </ul>
+        {% extends "menu.html" %}
+
+        {% block content %}
+
+        {% endblock %}
         <ul class="flex gap-5 mr-10">
-            <li>Профиль</li>
-            <li>Выйти</li>
+            <button onclick="goToCheckout()" class="border-1 bg-white-300 flex gap-5 mr-10 p-0">Корзина</button>
+            <button onclick="clickOnProfile()" class="border-1 bg-white-300 flex gap-5 mr-10 p-0">Профиль</button>
         </ul>
     </nav>
     <hr>
     <div id="content">
-        {% block content %}{% endblock %}
     </div>
 </body>
 </html>

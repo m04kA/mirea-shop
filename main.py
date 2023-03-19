@@ -1,6 +1,11 @@
 from fastapi.middleware.cors import CORSMiddleware
-from orders.router import router as routerOrder
+#from orders.router import router as routerOrder
+from src.pages.contactInfoPage import router as routerContact
+from src.pages.shawarmaPage import router as routerShawarma
+from src.pages.snacksPage import router as routerSnacks
 from src.pages.router import router as routerMainPage
+from src.pages.profilePage import router as routerProfilePage
+from src.pages.checkoutPage import router as routerCheckoutPage
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, Depends
@@ -21,11 +26,16 @@ fastapi_users = FastAPIUsers[User, int](
 )
 
 app.include_router(routerMainPage)
-app.include_router(routerOrder)
+#app.include_router(routerOrder)
+app.include_router(routerContact)
+app.include_router(routerShawarma)
+app.include_router(routerProfilePage)
+app.include_router(routerCheckoutPage)
+app.include_router(routerSnacks)
 
 app.mount("/static", StaticFiles(directory="src/static"), name = "static")
 origins = [
-    "http://localhost:3000",
+    "*",
 ]
 
 app.add_middleware(
