@@ -6,7 +6,11 @@ from sqlalchemy import pool
 from alembic import context
 
 from config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
+
+# For initialization models in metaInfo
 from models.userModels import *
+from models.itemShawarma import *
+
 from models.models import METADATA
 
 # this is the Alembic Config object, which provides
