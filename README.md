@@ -3,11 +3,14 @@ our shawarma
 
 for start:
 1. pip3 install -r requirements.txt
-2. create .env with date:
-   3. DB_HOST=localhost 
-   4. DB_PORT=5432 
-   5. DB_NAME=postgres 
-   6. DB_USER=postgres 
-   6. DB_PASS=postgres
+2. docker-compose up
+
+Now you have project by DB.
+
+      - HOST=localhost
+      - PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
 
 And let's start!
