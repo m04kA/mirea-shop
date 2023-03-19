@@ -3,8 +3,6 @@ from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import get_async_session
-from orders.models import order
-from orders.schemas import OrderCreate
 
 router = APIRouter(
     prefix="/orders",
