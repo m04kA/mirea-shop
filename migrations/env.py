@@ -5,13 +5,17 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
+import os
+import sys
+
+sys.path.append(os.path.join(sys.path[0], 'src'))
+
+from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
+from src.auth.models import metadata as metadata_auth
+from src.items.models import metadata as metadata_items
 
 # For initialization models in metaInfo
-from models.userModels import *
-from models.itemShawarma import *
 
-from models.models import METADATA
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -33,7 +37,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = METADATA
+target_metadata = [metadata_auth, metadata_items]
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
