@@ -3,9 +3,9 @@ from typing import Optional
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
 
-from auth.database import User, get_user_db
+from src.auth.utils import User, get_user_db
 
-from config import SECRET_KEY_MANAGER
+from src.config import SECRET_KEY_MANAGER
 
 secret_key_manager = SECRET_KEY_MANAGER
 

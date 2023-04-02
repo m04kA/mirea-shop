@@ -1,10 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, ForeignKey
+from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, ForeignKey, MetaData
 
-from .models import METADATA
-
-metadata = METADATA
+metadata = MetaData()
 
 item = Table(
     "item",
