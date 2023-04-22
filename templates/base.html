@@ -7,8 +7,11 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
-    {% block head %}{% endblock %}
-    <title>Шаурма</title>
+    {% block head %}
+        <title>{% block title %} {% endblock %} - Шаурма</title>
+    {% endblock %}
+
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <nav class="flex justify-between text-3xl my-5">
@@ -16,17 +19,19 @@
             <li>Шаурма на углях</li>
         </ul>
         {% extends "menu.html" %}
-
-        {% block content %}
-
-        {% endblock %}
         <ul class="flex gap-5 mr-10">
             <button onclick="goToCheckout()" class="border-1 bg-white-300 flex gap-5 mr-10 p-0">Корзина</button>
             <button onclick="clickOnProfile()" class="border-1 bg-white-300 flex gap-5 mr-10 p-0">Профиль</button>
         </ul>
     </nav>
     <hr>
-    <div id="content">
+    {% block content %}
+
+    {% endblock %}
+    <div id="footer">
+        {% block footer %}
+            &copy; Copyright 2008 by <a href="#">you</a>.
+        {% endblock %}
     </div>
 </body>
 </html>
