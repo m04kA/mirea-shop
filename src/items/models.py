@@ -40,7 +40,8 @@ class Item(Base):
     ingredients = relationship(
         "Ingredient",
         secondary=item_ingredient,
-        back_populates="items"
+        back_populates="items",
+        lazy="selectin"
     )
 
 
