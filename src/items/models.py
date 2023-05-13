@@ -58,13 +58,3 @@ class Ingredient(Base):
         back_populates="ingredients"
     )
 
-
-# item_ingredient = Table(
-#     "item_ingredient",
-#     Base.metadata,
-#     Column("id", Integer, primary_key=True),
-#     Column("item_id", Integer, ForeignKey("item.id")),
-#     Column("ingredient_id", Integer, ForeignKey("ingredient.id")),
-#     Column("created_at", TIMESTAMP, default=datetime.utcnow),
-#     Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
-# )
