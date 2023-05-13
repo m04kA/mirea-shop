@@ -17,29 +17,43 @@ router = APIRouter(
 
 
 @router.post('/', response_model=item_schema)
-async def create_item(item: ItemCreate, session: AsyncSession = Depends(get_async_session)):
-    item_dict = item.dict()
-    ingredients = item_dict.pop('ingredients')
-    item_object = Item(**item_dict)
+async def create_item(new_operation: ItemCreate, session: AsyncSession = Depends(get_async_session)):
 
-
-    for ingredient in ingredients:
-        query = select(Ingredient).where(Ingredient.id == ingredient)
-        result = await session.execute(query)
-        db_ingredient = result.scalars().all()
-        if db_ingredient is None:
-            return Response('Ingredient does not exist', 500)
-
-        item_object.ingredients.append(db_ingredient[0])
-
-    session.add(item_object)
+    item_dict = new_operation.dict()
+    ingredients_ids = item_dict.pop('ingredients')
+    db_item = Item(**item_dict)
+    for ingredient_id in ingredients_ids:
+        ingredient = await session.get(Ingredient, ingredient_id)
+        if ingredient:
+            db_item.ingredients.append(ingredient)
+    session.add(db_item)
     await session.commit()
-    await session.refresh(item_object)
+    await session.refresh(db_item)
 
-    return item_object
+    return db_item
+    # stmt = insert(Ingredient).values(**item_dict)
+    # test = await session.execute(stmt)
+    # await session.commit()
+
+
+    # for ingredient_id in ingredients_ids:
+    #     ingredient = await session.get(Ingredient, ingredient_id)
+    #     if ingredient:
+    #         stmt = insert(item_ingredient).values(**{'item_id': })
+    #         await session.execute(stmt)
+    #     if db_ingredient is None:
+    #         return Response('Ingredient does not exist', 500)
+    #
+    #     item_object.ingredients.append(db_ingredient[0])
+    #
+    # session.add(item_object)
+    # await session.commit()
+    # await session.refresh(item_object)
+    #
+    # return item_object
 
 @router.get("/{item_id}/")
-async def get_one_ingredient(item_id: int, session: AsyncSession = Depends(get_async_session)):
+async def get_one_item(item_id: int, session: AsyncSession = Depends(get_async_session)):
     return await session.get(Item, item_id)
 
 
