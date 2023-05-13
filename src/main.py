@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from src.auth.base_config import auth_backend, fastapi_users
 from src.auth.schemas import UserRead, UserCreate, UserUpdate
 from src.items.router import router as items_router
-from src.items.ingredients.router import router as ingredients_router
+# from src.items.ingredients.router import router as ingredients_router
 
 app = FastAPI(
     title='shawarma'
@@ -35,5 +35,5 @@ app.include_router(
 )
 
 app.include_router(items_router)
-app.include_router(ingredients_router)
+# app.include_router(ingredients_router)
 

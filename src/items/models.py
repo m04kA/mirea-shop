@@ -1,38 +1,70 @@
-import enum
 from datetime import datetime
 
-from sqlalchemy import TIMESTAMP, Column, Integer, String, Boolean, Table, ForeignKey, MetaData, Enum
+from sqlalchemy import TIMESTAMP, Column, Integer, String, Boolean, Table, ForeignKey, MetaData
+from sqlalchemy.orm import relationship
 
-from src.items.ingredients.models import ingredient
+from src.database import Base, metadata
 
-metadata = MetaData()
-
+item_ingredient = Table(
+    "item_ingredient",
+    Base.metadata,
+    Column("id", Integer, primary_key=True),
+    Column("item_id", Integer, ForeignKey("item.id")),
+    Column("ingredient_id", Integer, ForeignKey("ingredient.id")),
+    Column("created_at", TIMESTAMP, default=datetime.utcnow),
+    Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+)
 
 type_item = Table(
     "type_item",
     metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String, nullable=False),
-)
-
-item = Table(
-    "item",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("price", Integer, nullable=False),
-    Column("description", String),
-    Column("item_type", ForeignKey(type_item.c.id)),
-    Column("photo_path", String),
-    Column("available", Boolean, default=True),
     Column("created_at", TIMESTAMP, default=datetime.utcnow),
     Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 )
 
-ingredient_shawarma = Table(
-    "item_ingredient",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("ingredient_id", Integer, ForeignKey(ingredient.c.id)),
-    Column("item_id", Integer, ForeignKey(item.c.id)),
-)
+
+class Item(Base):
+    __tablename__ = "item"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    price = Column(Integer, nullable=False)
+    description = Column(String)
+    item_type = Column(ForeignKey(type_item.c.id))
+    photo_path = Column(String)
+    available = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    ingredients = relationship(
+        "Ingredient",
+        secondary=item_ingredient,
+        back_populates="items"
+    )
+
+
+class Ingredient(Base):
+    __tablename__ = "ingredient"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    description = Column(String)
+    created_at = Column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    items = relationship(
+        "Item",
+        secondary=item_ingredient,
+        back_populates="ingredients"
+    )
+
+
+# item_ingredient = Table(
+#     "item_ingredient",
+#     Base.metadata,
+#     Column("id", Integer, primary_key=True),
+#     Column("item_id", Integer, ForeignKey("item.id")),
+#     Column("ingredient_id", Integer, ForeignKey("ingredient.id")),
+#     Column("created_at", TIMESTAMP, default=datetime.utcnow),
+#     Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+# )

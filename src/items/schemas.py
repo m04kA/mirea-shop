@@ -1,7 +1,9 @@
 from typing import Optional, List
 
 from pydantic import BaseModel
-from src.items.ingredients.schemas import Ingredient
+
+
+# from src.items.ingredients.schemas import Ingredient
 
 
 class TypeItem(BaseModel):
@@ -14,20 +16,42 @@ class ItemBase(BaseModel):
     price: float
     description: str
     item_type: TypeItem
-    available: bool
     photo_path: Optional[str] = None
     available: Optional[bool] = True
 
 
-class ItemCreate(ItemBase):
-    ingredient_ids: List[int] = []
-
-
 class Item(ItemBase):
     id: int
-    created_at: Optional[str] = None
-    updated_at: Optional[str] = None
-    ingredients_ids: List[Ingredient.id] = []
+
+    # created_at: Optional[str] = None
+    # updated_at: Optional[str] = None
 
     class Config:
         orm_mode = True
+
+
+class IngredientBase(BaseModel):
+    name: str
+    description: Optional[str]
+
+
+class IngredientCreate(IngredientBase):
+    pass
+
+
+class Ingredient(IngredientBase):
+    id: int
+
+    # created_at: Optional[datetime] = None
+    # updated_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+
+
+class ItemCreate(ItemBase):
+    ingredients: List[Ingredient]
+
+
+class ItemSchema(Item):
+    ingredients: List[Ingredient]
