@@ -17,7 +17,7 @@ item_ingredient = Table(
 
 type_item = Table(
     "type_item",
-    metadata,
+    Base.metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String, nullable=False),
     Column("created_at", TIMESTAMP, default=datetime.utcnow),

@@ -15,6 +15,7 @@ router = APIRouter(
     tags=["Items"]
 )
 
+# ---- ITEM ----
 
 @router.post('/', response_model=item_schema)
 async def create_item(new_operation: ItemCreate, session: AsyncSession = Depends(get_async_session)):
@@ -31,35 +32,22 @@ async def create_item(new_operation: ItemCreate, session: AsyncSession = Depends
     await session.refresh(db_item)
 
     return db_item
-    # stmt = insert(Ingredient).values(**item_dict)
-    # test = await session.execute(stmt)
-    # await session.commit()
 
-
-    # for ingredient_id in ingredients_ids:
-    #     ingredient = await session.get(Ingredient, ingredient_id)
-    #     if ingredient:
-    #         stmt = insert(item_ingredient).values(**{'item_id': })
-    #         await session.execute(stmt)
-    #     if db_ingredient is None:
-    #         return Response('Ingredient does not exist', 500)
-    #
-    #     item_object.ingredients.append(db_ingredient[0])
-    #
-    # session.add(item_object)
-    # await session.commit()
-    # await session.refresh(item_object)
-    #
-    # return item_object
 
 @router.get("/{item_id}/")
 async def get_one_item(item_id: int, session: AsyncSession = Depends(get_async_session)):
     return await session.get(Item, item_id)
 
+# --------
 
-@router.get("/type-items/{type_items_id}/")
+# ---- type-items ----
+
+@router.get("/type-items/{type_items_id}/", response_model=TypeItem)
 async def get_one_type_items(type_items_id: int, session: AsyncSession = Depends(get_async_session)):
-    return await session.get(type_item, type_items_id)
+    # return await session.get(type_item, type_items_id)
+    query = select(type_item).where(type_item.c.id == type_items_id)
+    result = await session.execute(query)
+    return result.all()[0]
 
 
 @router.get("/type-items/all", response_model=List[TypeItem])
@@ -84,6 +72,23 @@ async def delete_one_type_items(type_items_id: int, session: AsyncSession = Depe
     await session.commit()
     return {"status": "success"}
 
+@router.put('/type-items/{type_items_id}/', response_model=TypeItem)
+async def update_type_items(type_items_id: int, new_operation: TypeItemCreate, session: AsyncSession = Depends(get_async_session)):
+    query = select(type_item).where(type_item.c.id == type_items_id)
+    result = await session.execute(query)
+    db_type_item = result.all()[0]
+
+    db_type_item.name = new_operation.name
+
+    await session.refresh(db_type_item)
+    await session.commit()
+
+    return db_type_item
+
+# --------
+
+
+# ---- ingredients ----
 
 @router.get("/ingredients/{ingredient_id}/")
 async def get_one_ingredient(ingredient_id: int, session: AsyncSession = Depends(get_async_session)):
@@ -111,3 +116,5 @@ async def delete_one_ingredient(ingredient_id: int, session: AsyncSession = Depe
     await session.delete(ingredient)
     await session.commit()
     return {"status": "success"}
+
+# --------
