@@ -15,14 +15,22 @@ item_ingredient = Table(
     Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
 )
 
-type_item = Table(
-    "type_item",
-    Base.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("created_at", TIMESTAMP, default=datetime.utcnow),
-    Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
-)
+class TypeItem(Base):
+    __tablename__ = "type_item"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+# type_item = Table(
+#     "type_item",
+#     Base.metadata,
+#     Column("id", Integer, primary_key=True),
+#     Column("name", String, nullable=False),
+#     Column("created_at", TIMESTAMP, default=datetime.utcnow),
+#     Column("updated_at", TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+# )
 
 
 class Item(Base):
@@ -31,7 +39,7 @@ class Item(Base):
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     description = Column(String)
-    item_type = Column(ForeignKey(type_item.c.id))
+    item_type = Column(ForeignKey("type_item.id"))
     photo_path = Column(String)
     available = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
