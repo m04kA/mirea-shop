@@ -8,12 +8,15 @@ from alembic import context
 import os
 import sys
 
+from src.database import Base, metadata
+
 sys.path.append(os.path.join(sys.path[0], 'src'))
 
 from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
-from src.auth.models import metadata as metadata_auth
-from src.items.models import metadata as metadata_items
-from src.items.ingredients.models import metadata as metadata_ingredients
+from src.auth.models import *
+from src.items.models import *
+# from src.items.ingredients.models import *
+
 
 # For initialization models in metaInfo
 
@@ -38,7 +41,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [metadata_auth, metadata_ingredients, metadata_items]
+target_metadata = [metadata, Base.metadata]
 
 
 # other values from the config, defined by the needs of env.py,
