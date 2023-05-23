@@ -2,8 +2,10 @@
 our shawarma
 
 for start:
-1. pip3 install -r requirements.txt
-2. docker-compose up
+
+[//]: # (1. pip3 install -r requirements.txt)
+1. docker build -t mirea-shop .
+2. docker-compose up --build
 
 Now you have project by DB.
 
