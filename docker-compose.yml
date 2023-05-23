@@ -3,13 +3,61 @@ version: "3.9"
 services:
   db_postgres:
     image: postgres:15
-    container_name: db_postgres
+    restart: always
+    networks:
+      - net
     ports:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
-
     environment:
-      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+
+  migrations:
+    image: mirea-shop
+    command: alembic -c alembic.ini upgrade head
+    restart: on-failure
+    networks:
+      - net
+    depends_on:
+      - db_postgres
+    env_file:
+      - .env
+#    environment:
+#      - DB_HOST=db_postgres
+#      - DB_PORT=5432
+#      - DB_NAME=postgres
+#      - DB_USER=postgres
+#      - DB_PASS=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_DB=postgres
+
+  app:
+    image: mirea-shop
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+    restart: always
+    networks:
+      - net
+    depends_on:
+      - migrations
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+#    environment:
+#      - DB_HOST=db_postgres
+#      - DB_PORT=5432
+#      - DB_NAME=postgres
+#      - DB_USER=postgres
+#      - DB_PASS=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_DB=postgres
+
+networks:
+  net:
+    driver: bridge
+
