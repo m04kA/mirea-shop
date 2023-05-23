@@ -83,7 +83,7 @@ async def delete_one_ingredient(item_id: int, session: AsyncSession = Depends(ge
     await session.commit()
     return {"status": "success"}
 
-@router.put('/{item_id}/', response_model=Item)
+@router.put('/{item_id}/', response_model=item_schema)
 async def update_ingredient(item_id: int, new_operation: ItemCreate, session: AsyncSession = Depends(get_async_session)):
     db_item = await session.get(Item, item_id)
 
@@ -97,17 +97,17 @@ async def update_ingredient(item_id: int, new_operation: ItemCreate, session: As
         db_item.photo_path = new_operation.photo_path
     if new_operation.available:
         db_item.available = new_operation.available
-
-    # TODO fix upgrade ingredients
-    # query = select(item_ingredient).where(item_ingredient.c.itme_id == item_id)
-    # result_ingredients_ids = await session.execute(query)
-    # old_ingredients_ids = result_ingredients_ids.scalars().all()
-    #
-    # for ingredient_id in new_operation.ingredients:
-    #     ingredient = await session.get(Ingredient, ingredient_id)
-    #     if ingredient:
-    #         db_item.ingredients
-
+#
+#     # TODO fix upgrade ingredients
+#     # query = select(item_ingredient).where(item_ingredient.c.itme_id == item_id)
+#     # result_ingredients_ids = await session.execute(query)
+#     # old_ingredients_ids = result_ingredients_ids.scalars().all()
+#     #
+#     # for ingredient_id in new_operation.ingredients:
+#     #     ingredient = await session.get(Ingredient, ingredient_id)
+#     #     if ingredient:
+#     #         db_item.ingredients
+#
     await session.commit()
     await session.refresh(db_item)
 
