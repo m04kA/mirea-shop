@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from src.auth.base_config import auth_backend, fastapi_users
 from src.auth.schemas import UserRead, UserCreate, UserUpdate
 from src.items.router import router as items_router, router_type_items, router_ingredients
+from src.basket.router import router as router_order
 
 # from src.items.ingredients.router import router as ingredients_router
 
@@ -38,4 +39,5 @@ app.include_router(
 app.include_router(items_router)
 app.include_router(router_type_items)
 app.include_router(router_ingredients)
+app.include_router(router_order)
 
